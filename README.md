@@ -2,7 +2,7 @@
 
 Problems statements:
 
-## Case 1: Login API $$
+## Case 1: Login API ##
 - Given username and password login credentials, design a login user interface that allows users to enter the system securely should the login credentials are accurate
 
 - Designs:
