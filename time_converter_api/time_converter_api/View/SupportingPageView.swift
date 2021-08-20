@@ -120,17 +120,17 @@ class LogoutPageView: UIViewController {
 // MARK: Update the Time Zone by sending an API Request using this class
 class TimeZoneChangeView: UIViewController {
 
+    let MIN_LIMIT = -12; let MAX_LIMIT = 12
+
     private lazy var topBannerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: Int(FULL_WIDTH), height: 100))
         view.backgroundColor = priColor
-
         let label = UILabel(frame: CGRect(x: 0, y: 50, width: Int(FULL_WIDTH), height: 80))
-        label.text = "請輸入數字(-12至+12)："
+        label.text = "請輸入數字(\(String(MIN_LIMIT))至+\(String(MAX_LIMIT))："
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.backgroundColor = priColor
         label.font = UIFont.systemFont(ofSize: 28)
-
         view.addSubview(label)
         return view
     }()
@@ -160,19 +160,19 @@ class TimeZoneChangeView: UIViewController {
         label.font = UIFont.systemFont(ofSize: 48)
         return label
     }()
-    
+
     private lazy var timezoneStepper: UIStepper = {
         let stepper = UIStepper(frame: CGRect(x: Int(FULL_WIDTH)/2, y: 250, width: BOX_WIDTH, height: BOX_HEIGHT))
         stepper.wraps = false
         stepper.autorepeat = false
-        stepper.minimumValue = -12
-        stepper.maximumValue = 12
+        stepper.minimumValue = Double(MIN_LIMIT)
+        stepper.maximumValue = Double(MAX_LIMIT)
         stepper.value = Double(GlobalDataAccess.shared.timezone)
         stepper.stepValue = 1
         stepper.addTarget(self, action: #selector(stepperValueTapped(_:)), for: .valueChanged)
         return stepper
     }()
-    
+
     @objc func stepperValueTapped(_ sender: UIStepper!){
         timezoneLabel.text = String( Int(sender.value) )
     }
@@ -191,12 +191,13 @@ class TimeZoneChangeView: UIViewController {
     @objc func submitButtonTapped(){
         // Obtain the number value from UIStepper's target label or UITextField (Limit UIStepper from -12 to +12)
         let newTimeZone: Int = Int(timezoneStepper.value)
-        print("Timezone Stepper Value: \(newTimeZone)")
-        
+
         // Second API Function for update comes here
-        let statusCodeUpdate = APIHandler.putHttpsResponse(sessionToken: GlobalDataAccess.shared.sessionToken, objectId: GlobalDataAccess.shared.objectId, timezone: newTimeZone)
+        let statusCodeUpdate = APIHandler.putHttpsResponse(sessionToken: GlobalDataAccess.shared.sessionToken,
+                                                           objectId: GlobalDataAccess.shared.objectId,
+                                                           timezone: newTimeZone)
         print("DEBUG: \(statusCodeUpdate)")
-        
+
         if statusCodeUpdate == 200 {
             let successMessage = SuccessAlertMessage()
             successMessage.modalPresentationStyle = .fullScreen
