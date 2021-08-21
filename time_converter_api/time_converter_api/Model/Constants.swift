@@ -31,6 +31,8 @@ let orgColor    = UIColor.init(red: 255/255.0, green: 189/255.0, blue: 134/255.0
 let FULL_WIDTH: CGFloat  = UIScreen.main.bounds.width
 let FULL_HEIGHT: CGFloat = UIScreen.main.bounds.height
 let OFFSET: Int          = 12
+let MARGIN: Int          = 64
+let PADDING: Int         = 16
 
 let BOX_WIDTH: Int       = Int(FULL_WIDTH - 24)
 let BOX_HEIGHT: Int      = 48

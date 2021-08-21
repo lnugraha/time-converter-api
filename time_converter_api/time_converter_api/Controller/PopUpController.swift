@@ -24,15 +24,18 @@ class AlertMessage: UIViewController {
     }()
 
     fileprivate func setLogoIcon(success: Bool) -> UIView {
-        let logoView = UIView(frame: CGRect(x: 0, y: 0, width: BOX_WIDTH, height: BOX_WIDTH))
+        let logoView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+        logoView.backgroundColor = gyColor
+
         let logoIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: LOGOSIZE, height: LOGOSIZE))
-        let logoLabel = UILabel(frame: CGRect(x: 0, y: 100, width: 140, height: TEXTFIELD_HEIGHT))
+        logoIcon.backgroundColor = gyColor
+
+        let logoLabel = UILabel(frame: CGRect(x: 0, y: 100, width: Int(FULL_WIDTH/2), height: TEXTFIELD_HEIGHT))
         logoLabel.font = UIFont.systemFont(ofSize: 24)
-        logoLabel.textAlignment = .center
         logoLabel.backgroundColor = gyColor
         
         if success == true {
-            logoIcon.image = UIImage(systemName: "checkmark.seal")
+            logoIcon.image = UIImage(systemName: "rectangle.badge.checkmark")
             logoIcon.tintColor = priColor
             logoLabel.text = "處理成功！"
             logoLabel.textColor = priColor
@@ -70,6 +73,17 @@ class AlertMessage: UIViewController {
         ])
     }
 
+    // Shift the logo (success or fail) upward
+    func shiftLogo(figure: UIView) {
+        self.view.addSubview(figure)
+        figure.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            figure.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+            figure.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -20),
+            figure.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
+            figure.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
+        ])
+    }
 }
 
 class SuccessAlertMessage: AlertMessage {
@@ -77,14 +91,7 @@ class SuccessAlertMessage: AlertMessage {
     override func viewDidLoad() {
         super.viewDidLoad()
         let figure = setLogoIcon(success: true)
-        self.view.addSubview(figure)
-        figure.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            figure.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-            figure.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0),
-            figure.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
-            figure.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
-        ])
+        shiftLogo(figure: figure)
     }
 
 }
@@ -94,14 +101,21 @@ class WarningAlertMessage: AlertMessage {
     override func viewDidLoad() {
         super.viewDidLoad()
         let figure = setLogoIcon(success: false)
-        self.view.addSubview(figure)
-        figure.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            figure.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-            figure.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0),
-            figure.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
-            figure.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
-        ])
+        shiftLogo(figure: figure)
+    }
+
+}
+
+class CommonButtonAccess: UIViewController {
+
+    public class func getCancelButton() -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: BUTTON_WIDTH, height: BUTTON_HEIGHT))
+        button.backgroundColor = blColor
+        button.layer.cornerRadius = 8
+        button.setTitle("取消", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        button.setTitleColor(UIColor.white, for: .normal)
+        return button
     }
 
 }

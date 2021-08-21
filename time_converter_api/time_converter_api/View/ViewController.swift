@@ -10,13 +10,6 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private lazy var globeLogo: UIImageView = {
-        let view = UIImageView(frame: CGRect(x: Int(FULL_WIDTH/2) - LOGOSIZE/2, y: 80, width: LOGOSIZE, height: LOGOSIZE))
-        view.image = UIImage(systemName: "globe")
-        view.tintColor = priColor
-        return view
-    }()
-
     private lazy var usernameView: UIView = {
         let view = UIView(frame: CGRect(x: 10, y: 200, width: BOX_WIDTH, height: BOX_HEIGHT))
         view.backgroundColor = UIColor.white
@@ -127,16 +120,61 @@ class ViewController: UIViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @objc func displayLoginPageView() {
         self.view.backgroundColor = gyColor
-        self.view.addSubview(globeLogo)
+
         self.view.addSubview(usernameView)
         usernameView.addSubview(usernameTextField)
         self.view.addSubview(passwordView)
         passwordView.addSubview(passwordTextField)
+
+        usernameView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            usernameView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
+            usernameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            usernameView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(42)),
+            usernameView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(42)),
+            usernameView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
+        passwordView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            passwordView.topAnchor.constraint(equalTo: usernameView.bottomAnchor, constant: 10),
+            passwordView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            passwordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(42)),
+            passwordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(42)),
+            passwordView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
         self.view.addSubview(warningMessage)
+        warningMessage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            warningMessage.topAnchor.constraint(equalTo: passwordView.bottomAnchor, constant: 2),
+            warningMessage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            warningMessage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(42)),
+            warningMessage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(42)),
+            warningMessage.heightAnchor.constraint(equalToConstant: CGFloat(20))
+        ])
+
         self.view.addSubview(loginButton)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loginButton.topAnchor.constraint(equalTo: warningMessage.bottomAnchor, constant: 2),
+            loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            loginButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(42)),
+            loginButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(42)),
+            loginButton.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // MARK: Dismiss keyboard when tapping any part of the screen
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        displayLoginPageView()
     }
 
 }
