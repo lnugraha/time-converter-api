@@ -46,22 +46,27 @@ class MainPageView: UIViewController {
     }
     
     private lazy var contentView: UIView = {
+        typealias configureGet = ConfigureUserDefault.GetUserDefaultValue
         let view = UIView(frame: CGRect(x: 0, y: 200, width: Int(FULL_WIDTH), height: Int(4*FULL_WIDTH/5)))
         view.backgroundColor = gyColor
 
         let INITIAL_Y = 10; let Y_INCREMENT = 40
 
+        let usernameTemp = configureGet.getUsername()
         let usernameTitle = setTitleOrLabel(textStr: "帳號", yPosition: INITIAL_Y, title: true)
-        let usernameLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.username, yPosition: Int(usernameTitle.frame.minY), title: false)
+        let usernameLabel = setTitleOrLabel(textStr: usernameTemp, yPosition: Int(usernameTitle.frame.minY), title: false)
 
+        let reportEmailTemp = configureGet.getReportEmail()
         let reportEmailTitle = setTitleOrLabel(textStr: "email", yPosition: INITIAL_Y + Y_INCREMENT, title: true)
-        let reportEmailLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.reportEmail, yPosition: Int(reportEmailTitle.frame.minY), title: false)
+        let reportEmailLabel = setTitleOrLabel(textStr: reportEmailTemp, yPosition: Int(reportEmailTitle.frame.minY), title: false)
 
+        let phoneTemp = configureGet.getPhone()
         let phoneTitle = setTitleOrLabel(textStr: "手機", yPosition: INITIAL_Y + 2*Y_INCREMENT, title: true)
-        let phoneLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.phone, yPosition: Int(phoneTitle.frame.minY), title: false)
+        let phoneLabel = setTitleOrLabel(textStr: phoneTemp, yPosition: Int(phoneTitle.frame.minY), title: false)
 
-        var accountVerification = "NO"
-        if GlobalDataAccess.shared.isVerifiedReportEmail == true {
+        var accountVerification = "NO";
+        let verifiedTemp = configureGet.getIsVerifiedReportEmail()
+        if verifiedTemp == true {
             accountVerification = "YES"
         } else {
             accountVerification = "NO"
@@ -70,8 +75,9 @@ class MainPageView: UIViewController {
         let verificationTitle = setTitleOrLabel(textStr: "確認", yPosition: INITIAL_Y + 3*Y_INCREMENT, title: true)
         let verificationLabel = setTitleOrLabel(textStr: accountVerification, yPosition: Int(verificationTitle.frame.minY), title: false)
 
+        let timezoneTemp = configureGet.getTimezone()
         let timezoneTitle = setTitleOrLabel(textStr: "時區", yPosition: INITIAL_Y + 4*Y_INCREMENT, title: true)
-        let timezoneLabel = setTitleOrLabel(textStr: String(GlobalDataAccess.shared.timezone), yPosition: Int(timezoneTitle.frame.minY), title: false)
+        let timezoneLabel = setTitleOrLabel(textStr: String(timezoneTemp), yPosition: Int(timezoneTitle.frame.minY), title: false)
 
         view.addSubview(usernameTitle)
         view.addSubview(usernameLabel)
@@ -90,12 +96,11 @@ class MainPageView: UIViewController {
 
         return view
     }()
-    
-    
+
     private lazy var logoutButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 64, y: Int(FULL_HEIGHT)-96, width: Int(BOX_WIDTH/3), height: 48))
         button.layer.cornerRadius = 8
-        button.backgroundColor = priColor
+        button.backgroundColor = blColor
         button.setTitle("登出", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
@@ -113,7 +118,7 @@ class MainPageView: UIViewController {
     private lazy var changeTimeZoneButton: UIButton = {
         let button = UIButton(frame: CGRect(x: Int(FULL_WIDTH)-64, y: Int(FULL_HEIGHT)-96, width: Int(BOX_WIDTH/3), height: 48))
         button.layer.cornerRadius = 8
-        button.backgroundColor = bl_5Color
+        button.backgroundColor = priColor
         button.setTitle("改變時區", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
@@ -128,10 +133,7 @@ class MainPageView: UIViewController {
         present(timeZoneView, animated: false, completion: nil)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = gyColor
-
+    @objc private func displayMainPageView() {
         // Contents
         self.view.addSubview(topBannerView)
         self.view.addSubview(contentView)
@@ -143,7 +145,7 @@ class MainPageView: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: FULL_HEIGHT-96),
-            logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 64),
+            logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(MARGIN)),
             logoutButton.widthAnchor.constraint(equalToConstant: CGFloat(Int(BOX_WIDTH/3))),
             logoutButton.heightAnchor.constraint(equalToConstant: 48)
         ])
@@ -151,12 +153,16 @@ class MainPageView: UIViewController {
         changeTimeZoneButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             changeTimeZoneButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: FULL_HEIGHT-96),
-            changeTimeZoneButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -64),
+            changeTimeZoneButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(MARGIN)),
             changeTimeZoneButton.widthAnchor.constraint(equalToConstant: CGFloat(Int(BOX_WIDTH/3))),
             changeTimeZoneButton.heightAnchor.constraint(equalToConstant: 48)
         ])
-
     }
-    
-    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = gyColor
+        displayMainPageView()
+    }
+
 }

@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+class CancelButtonControl: UIViewController {
+    @objc public func cancelButtonTapped() {
+        let mainPageView = MainPageView()
+        mainPageView.modalPresentationStyle = .fullScreen
+        present(mainPageView, animated: false, completion: nil)
+    }
+}
+
 // MARK: Return back to the login menu when pressed
 class LogoutPageView: UIViewController {
 
@@ -60,23 +68,15 @@ class LogoutPageView: UIViewController {
     }()
     
     @objc func logoutButtonTapped(){
+        // Remove all of the login credentials
+        UserDefaults.standard.setLoggedIn(value: false)
+        
         let viewController = ViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: false, completion: nil)
     }
 
     // MARK: Cancel logout and return to main page
-    private lazy var cancelButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 10, y: 250, width: 100, height: 36))
-        button.backgroundColor = blColor
-        button.layer.cornerRadius = 8
-        button.setTitle("取消", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    
     @objc func cancelButtonTapped(){
         let mainPageView = MainPageView()
         mainPageView.modalPresentationStyle = .fullScreen
@@ -88,6 +88,9 @@ class LogoutPageView: UIViewController {
         self.view.backgroundColor = gyColor
         self.view.addSubview(logoutMessage)
         self.view.addSubview(logoutButton)
+
+        let cancelButton = CommonButtonAccess.getCancelButton()
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         self.view.addSubview(cancelButton)
 
         logoutMessage.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +104,7 @@ class LogoutPageView: UIViewController {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: logoutMessage.topAnchor, constant: 160),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 64),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(MARGIN)),
             cancelButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH)),
             cancelButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT))
         ])
@@ -109,7 +112,7 @@ class LogoutPageView: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoutButton.topAnchor.constraint(equalTo: logoutMessage.topAnchor, constant: 160),
-            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -64),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CGFloat(MARGIN)),
             logoutButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH)),
             logoutButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT))
         ])
@@ -121,12 +124,14 @@ class LogoutPageView: UIViewController {
 class TimeZoneChangeView: UIViewController {
 
     let MIN_LIMIT = -12; let MAX_LIMIT = 12
+    typealias configureGet = ConfigureUserDefault.GetUserDefaultValue
+    let CURRENT_TIMEZONE = configureGet.getTimezone()
 
     private lazy var topBannerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: Int(FULL_WIDTH), height: 100))
         view.backgroundColor = priColor
         let label = UILabel(frame: CGRect(x: 0, y: 50, width: Int(FULL_WIDTH), height: 80))
-        label.text = "請輸入數字(\(String(MIN_LIMIT))至+\(String(MAX_LIMIT))："
+        label.text = "請輸入數字(\(String(MIN_LIMIT))至+\(String(MAX_LIMIT)))："
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.backgroundColor = priColor
@@ -150,7 +155,7 @@ class TimeZoneChangeView: UIViewController {
 
     private lazy var timezoneLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: Int(FULL_WIDTH)/2, y: 180, width: LOGOSIZE, height: LOGOSIZE))
-        label.text = String(GlobalDataAccess.shared.timezone)
+        label.text = String(CURRENT_TIMEZONE)
         label.backgroundColor = UIColor.white
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
@@ -167,7 +172,7 @@ class TimeZoneChangeView: UIViewController {
         stepper.autorepeat = false
         stepper.minimumValue = Double(MIN_LIMIT)
         stepper.maximumValue = Double(MAX_LIMIT)
-        stepper.value = Double(GlobalDataAccess.shared.timezone)
+        stepper.value = Double(CURRENT_TIMEZONE)
         stepper.stepValue = 1
         stepper.addTarget(self, action: #selector(stepperValueTapped(_:)), for: .valueChanged)
         return stepper
@@ -177,6 +182,7 @@ class TimeZoneChangeView: UIViewController {
         timezoneLabel.text = String( Int(sender.value) )
     }
 
+    // MARK: Submit user's HTTPS PUT request to update the timezone based on the stepper's value
     private lazy var submitButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 10, y: 250, width: 100, height: 36))
         button.backgroundColor = priColor
@@ -188,13 +194,19 @@ class TimeZoneChangeView: UIViewController {
         return button
     }()
 
+    @objc public func cancelButtonTapped() {
+        let mainPageView = MainPageView()
+        mainPageView.modalPresentationStyle = .fullScreen
+        present(mainPageView, animated: false, completion: nil)
+    }
+
     @objc func submitButtonTapped(){
         // Obtain the number value from UIStepper's target label or UITextField (Limit UIStepper from -12 to +12)
         let newTimeZone: Int = Int(timezoneStepper.value)
 
         // Second API Function for update comes here
-        let statusCodeUpdate = APIHandler.putHttpsResponse(sessionToken: GlobalDataAccess.shared.sessionToken,
-                                                           objectId: GlobalDataAccess.shared.objectId,
+        let statusCodeUpdate = APIHandler.putHttpsResponse(sessionToken: configureGet.getSessionToken(),
+                                                           objectId: configureGet.getObjectId(),
                                                            timezone: newTimeZone)
         print("DEBUG: \(statusCodeUpdate)")
 
@@ -202,7 +214,7 @@ class TimeZoneChangeView: UIViewController {
             let successMessage = SuccessAlertMessage()
             successMessage.modalPresentationStyle = .fullScreen
             present(successMessage, animated: false, completion: nil)
-            GlobalDataAccess.shared.timezone = newTimeZone
+            ConfigureUserDefault.SetUserDefaultValue.setTimezone(timezone: newTimeZone)
         } else {
             let warningMessage = WarningAlertMessage()
             warningMessage.modalPresentationStyle = .fullScreen
@@ -214,10 +226,16 @@ class TimeZoneChangeView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = gyColor
+
+        let cancelButton = CommonButtonAccess.getCancelButton()
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+
         self.view.addSubview(topBannerView)
         self.view.addSubview(currentLabel)
         self.view.addSubview(timezoneLabel)
         self.view.addSubview(timezoneStepper)
+
+        self.view.addSubview(cancelButton)
         self.view.addSubview(submitButton)
 
         currentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -243,10 +261,18 @@ class TimeZoneChangeView: UIViewController {
             timezoneStepper.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
         ])
 
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            cancelButton.topAnchor.constraint(equalTo: timezoneStepper.bottomAnchor, constant: 20),
+            cancelButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 64),
+            cancelButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT)),
+            cancelButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH))
+        ])
+
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            submitButton.topAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0),
-            submitButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            submitButton.topAnchor.constraint(equalTo: timezoneStepper.bottomAnchor, constant: 20),
+            submitButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -64),
             submitButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT)),
             submitButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH))
         ])

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class AlertMessage: UIViewController {
-    
+
     // Elements: OK button, Image, and Texts
     private lazy var proceedButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: BUTTON_WIDTH, height: BUTTON_HEIGHT))
@@ -102,6 +102,20 @@ class WarningAlertMessage: AlertMessage {
             figure.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
             figure.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
         ])
+    }
+
+}
+
+class CommonButtonAccess: UIViewController {
+
+    public class func getCancelButton() -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: BUTTON_WIDTH, height: BUTTON_HEIGHT))
+        button.backgroundColor = blColor
+        button.layer.cornerRadius = 8
+        button.setTitle("取消", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        button.setTitleColor(UIColor.white, for: .normal)
+        return button
     }
 
 }

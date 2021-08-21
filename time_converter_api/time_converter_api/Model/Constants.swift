@@ -30,7 +30,8 @@ let orgColor    = UIColor.init(red: 255/255.0, green: 189/255.0, blue: 134/255.0
 // MARK: Dimensions and Sizing
 let FULL_WIDTH: CGFloat  = UIScreen.main.bounds.width
 let FULL_HEIGHT: CGFloat = UIScreen.main.bounds.height
-let OFFSET: Int          = 12
+let OFFSET: Int          = 12 // Between textfield and textbox
+let MARGIN: Int          = 64 // Between UIElement and edge
 
 let BOX_WIDTH: Int       = Int(FULL_WIDTH - 24)
 let BOX_HEIGHT: Int      = 48
@@ -41,3 +42,20 @@ let TEXTFIELD_HEIGHT:Int = BOX_HEIGHT - OFFSET
 let BUTTON_WIDTH         = BOX_WIDTH/3
 let BUTTON_HEIGHT        = 48
 let LOGOSIZE             = 96
+
+extension UserDefaults {
+
+    enum UserDefaultKeys: String {
+        case isLoggedIn
+    }
+
+    func setLoggedIn(value: Bool) {
+        set(value, forKey: UserDefaultKeys.isLoggedIn.rawValue)
+        synchronize()
+    }
+
+    func isLoggedIn() -> Bool {
+        return bool(forKey: UserDefaultKeys.isLoggedIn.rawValue)
+    }
+
+}

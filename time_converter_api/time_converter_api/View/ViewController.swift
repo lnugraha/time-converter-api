@@ -87,7 +87,7 @@ class ViewController: UIViewController {
     }()
 
     @objc private func loginButtonTapped() {
-        // Check if both username and password are not empty
+
         if (usernameTextField.text == "" || passwordTextField.text == "") {
             warningMessage.text = "帳號或密碼不能空間"
             passwordView.layer.borderWidth = 2
@@ -99,18 +99,24 @@ class ViewController: UIViewController {
 
             // Check if the returned response are correct
             APIHandler.postHttpsResponse(username: usernameTextField.text!, password: passwordTextField.text!){ resultParsed in
-                GlobalDataAccess.shared.objectId     = resultParsed.objectId
-                GlobalDataAccess.shared.sessionToken = resultParsed.sessionToken
-                // All data that will be displayed
-                GlobalDataAccess.shared.username     = resultParsed.username
-                GlobalDataAccess.shared.timezone     = resultParsed.timezone
-                GlobalDataAccess.shared.code         = resultParsed.code
-                GlobalDataAccess.shared.phone        = resultParsed.phone
-                GlobalDataAccess.shared.reportEmail  = resultParsed.reportEmail
-                GlobalDataAccess.shared.isVerifiedReportEmail = resultParsed.isVerifiedReportEmail
+                typealias configureSet = ConfigureUserDefault.SetUserDefaultValue
+
+                configureSet.setObjectId(objectId: resultParsed.objectId)
+                configureSet.setSessionToken(sessionToken: resultParsed.sessionToken)
+                configureSet.setUsername(username: resultParsed.username)
+                configureSet.setTimezone(timezone: resultParsed.timezone)
+                configureSet.setCode(code: resultParsed.code)
+                configureSet.setPhone(phone: resultParsed.phone)
+                configureSet.setReportEmail(reportEmail: resultParsed.reportEmail)
+                configureSet.setIsVerifiedReportEmail(isVerifiedReportEmail: resultParsed.isVerifiedReportEmail)
+
             }
 
-            if (GlobalDataAccess.shared.objectId != "NULL_ID" && GlobalDataAccess.shared.sessionToken != "NULL_ID" && GlobalDataAccess.shared.username == usernameTextField.text!) {
+            typealias configureGet = ConfigureUserDefault.GetUserDefaultValue
+
+            if (configureGet.getObjectId() != "NULL_ID" && configureGet.getSessionToken() != "NULL_ID" && configureGet.getUsername() == usernameTextField.text!) {
+                // Save all login credentials inside the UserDefaults
+                UserDefaults.standard.setLoggedIn(value: true)
                 // Transition to the next view controller
                 let mainPageView = MainPageView()
                 mainPageView.modalPresentationStyle = .fullScreen
@@ -127,8 +133,7 @@ class ViewController: UIViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @objc func displayLoginPageView() {
         self.view.backgroundColor = gyColor
         self.view.addSubview(globeLogo)
         self.view.addSubview(usernameView)
@@ -137,6 +142,18 @@ class ViewController: UIViewController {
         passwordView.addSubview(passwordTextField)
         self.view.addSubview(warningMessage)
         self.view.addSubview(loginButton)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if UserDefaults.standard.isLoggedIn() {
+            let mainPageView = MainPageView()
+            mainPageView.modalPresentationStyle = .fullScreen
+            present(mainPageView, animated: false, completion: nil)
+        } else {
+            perform(#selector(displayLoginPageView))
+        }
     }
 
 }
