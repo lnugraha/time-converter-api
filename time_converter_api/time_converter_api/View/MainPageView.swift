@@ -29,7 +29,11 @@ class MainPageView: UIViewController {
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             label.heightAnchor.constraint(equalToConstant: 30),
         ])
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> fa69528cd11bf19fb5c79ffc2ab40278ab036931
         return view
     }()
 
@@ -52,24 +56,29 @@ class MainPageView: UIViewController {
 
         return label
     }
-    
+
     private lazy var contentView: UIView = {
+        typealias configureGet = ConfigureUserDefault.GetUserDefaultValue
         let view = UIView(frame: CGRect(x: 0, y: 200, width: Int(FULL_WIDTH), height: Int(4*FULL_WIDTH/5)))
         view.backgroundColor = gyColor
 
         let INITIAL_Y = 10; let Y_INCREMENT = 40
 
+        let usernameTemp = configureGet.getUsername()
         let usernameTitle = setTitleOrLabel(textStr: "帳號", yPosition: INITIAL_Y, title: true)
-        let usernameLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.username, yPosition: Int(usernameTitle.frame.minY), title: false)
+        let usernameLabel = setTitleOrLabel(textStr: usernameTemp, yPosition: Int(usernameTitle.frame.minY), title: false)
 
+        let reportEmailTemp = configureGet.getReportEmail()
         let reportEmailTitle = setTitleOrLabel(textStr: "email", yPosition: INITIAL_Y + Y_INCREMENT, title: true)
-        let reportEmailLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.reportEmail, yPosition: Int(reportEmailTitle.frame.minY), title: false)
+        let reportEmailLabel = setTitleOrLabel(textStr: reportEmailTemp, yPosition: Int(reportEmailTitle.frame.minY), title: false)
 
+        let phoneTemp = configureGet.getPhone()
         let phoneTitle = setTitleOrLabel(textStr: "手機", yPosition: INITIAL_Y + 2*Y_INCREMENT, title: true)
-        let phoneLabel = setTitleOrLabel(textStr: GlobalDataAccess.shared.phone, yPosition: Int(phoneTitle.frame.minY), title: false)
+        let phoneLabel = setTitleOrLabel(textStr: phoneTemp, yPosition: Int(phoneTitle.frame.minY), title: false)
 
-        var accountVerification = "NO"
-        if GlobalDataAccess.shared.isVerifiedReportEmail == true {
+        var accountVerification = "NO";
+        let verifiedTemp = configureGet.getIsVerifiedReportEmail()
+        if verifiedTemp == true {
             accountVerification = "YES"
         } else {
             accountVerification = "NO"
@@ -78,8 +87,9 @@ class MainPageView: UIViewController {
         let verificationTitle = setTitleOrLabel(textStr: "確認", yPosition: INITIAL_Y + 3*Y_INCREMENT, title: true)
         let verificationLabel = setTitleOrLabel(textStr: accountVerification, yPosition: Int(verificationTitle.frame.minY), title: false)
 
+        let timezoneTemp = configureGet.getTimezone()
         let timezoneTitle = setTitleOrLabel(textStr: "時區", yPosition: INITIAL_Y + 4*Y_INCREMENT, title: true)
-        let timezoneLabel = setTitleOrLabel(textStr: String(GlobalDataAccess.shared.timezone), yPosition: Int(timezoneTitle.frame.minY), title: false)
+        let timezoneLabel = setTitleOrLabel(textStr: String(timezoneTemp), yPosition: Int(timezoneTitle.frame.minY), title: false)
 
         view.addSubview(usernameTitle)
         view.addSubview(usernameLabel)
@@ -163,6 +173,10 @@ class MainPageView: UIViewController {
 
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+<<<<<<< HEAD
+=======
+//            logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: FULL_HEIGHT-96),
+>>>>>>> fa69528cd11bf19fb5c79ffc2ab40278ab036931
             logoutButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -CGFloat(PADDING)),
             logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
             logoutButton.widthAnchor.constraint(equalToConstant: CGFloat(Int(BOX_WIDTH/3))),
@@ -171,18 +185,25 @@ class MainPageView: UIViewController {
 
         changeTimeZoneButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+<<<<<<< HEAD
+=======
+//            changeTimeZoneButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: FULL_HEIGHT-96),
+>>>>>>> fa69528cd11bf19fb5c79ffc2ab40278ab036931
             changeTimeZoneButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -CGFloat(PADDING)),
             changeTimeZoneButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
             changeTimeZoneButton.widthAnchor.constraint(equalToConstant: CGFloat(Int(BOX_WIDTH/3))),
             changeTimeZoneButton.heightAnchor.constraint(equalToConstant: 48)
         ])
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> fa69528cd11bf19fb5c79ffc2ab40278ab036931
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = gyColor
         displayMainPageView()
     }
-    
-    
+
 }

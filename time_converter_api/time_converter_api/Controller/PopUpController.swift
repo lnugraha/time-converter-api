@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class AlertMessage: UIViewController {
-    
+
     // Elements: OK button, Image, and Texts
     private lazy var proceedButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: BUTTON_WIDTH, height: BUTTON_HEIGHT))
@@ -25,7 +25,11 @@ class AlertMessage: UIViewController {
 
     fileprivate func setLogoIcon(success: Bool) -> UIView {
         let logoView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+<<<<<<< HEAD
         logoView.backgroundColor = gyColor
+=======
+        logoView.backgroundColor = priColor
+>>>>>>> fa69528cd11bf19fb5c79ffc2ab40278ab036931
 
         let logoIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: LOGOSIZE, height: LOGOSIZE))
         logoIcon.backgroundColor = gyColor
