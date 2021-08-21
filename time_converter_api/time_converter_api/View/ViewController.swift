@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     private lazy var globeLogo: UIImageView = {
         let view = UIImageView(frame: CGRect(x: Int(FULL_WIDTH/2) - LOGOSIZE/2, y: 80, width: LOGOSIZE, height: LOGOSIZE))
         view.image = UIImage(systemName: "globe")
+        view.contentMode = .scaleAspectFit
         view.tintColor = priColor
         return view
     }()
@@ -135,17 +136,68 @@ class ViewController: UIViewController {
 
     @objc func displayLoginPageView() {
         self.view.backgroundColor = gyColor
+
         self.view.addSubview(globeLogo)
+        globeLogo.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            globeLogo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 40),
+            globeLogo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            globeLogo.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
+            globeLogo.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
+        ])
+
         self.view.addSubview(usernameView)
         usernameView.addSubview(usernameTextField)
         self.view.addSubview(passwordView)
         passwordView.addSubview(passwordTextField)
+
+        usernameView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            usernameView.topAnchor.constraint(equalTo: globeLogo.bottomAnchor, constant: 5),
+            usernameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            usernameView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
+            usernameView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            usernameView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
+        passwordView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            passwordView.topAnchor.constraint(equalTo: usernameView.bottomAnchor, constant: 10),
+            passwordView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            passwordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
+            passwordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            passwordView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
         self.view.addSubview(warningMessage)
+        warningMessage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            warningMessage.topAnchor.constraint(equalTo: passwordView.bottomAnchor, constant: 2),
+            warningMessage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            warningMessage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
+            warningMessage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            warningMessage.heightAnchor.constraint(equalToConstant: CGFloat(20))
+        ])
+
         self.view.addSubview(loginButton)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loginButton.topAnchor.constraint(equalTo: warningMessage.bottomAnchor, constant: 2),
+            loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            loginButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
+            loginButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            loginButton.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
+        ])
+
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // MARK: Dismiss keyboard when tapping any part of the screen
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
 
         if UserDefaults.standard.isLoggedIn() {
             let mainPageView = MainPageView()
@@ -157,3 +209,4 @@ class ViewController: UIViewController {
     }
 
 }
+

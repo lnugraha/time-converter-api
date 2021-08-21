@@ -31,6 +31,7 @@ let orgColor    = UIColor.init(red: 255/255.0, green: 189/255.0, blue: 134/255.0
 let FULL_WIDTH: CGFloat  = UIScreen.main.bounds.width
 let FULL_HEIGHT: CGFloat = UIScreen.main.bounds.height
 let OFFSET: Int          = 12 // Between textfield and textbox
+let PADDING: Int         = 16 // A smaller version of margin
 let MARGIN: Int          = 64 // Between UIElement and edge
 
 let BOX_WIDTH: Int       = Int(FULL_WIDTH - 24)

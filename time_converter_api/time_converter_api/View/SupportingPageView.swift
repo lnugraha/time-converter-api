@@ -66,10 +66,15 @@ class LogoutPageView: UIViewController {
         button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         return button
     }()
-    
+
     @objc func logoutButtonTapped(){
         // Remove all of the login credentials
         UserDefaults.standard.setLoggedIn(value: false)
+        UserDefaults.standard.removeObject(forKey: "username")
+        UserDefaults.standard.removeObject(forKey: "objectId")
+        UserDefaults.standard.removeObject(forKey: "sessionToken")
+        
+        
         
         let viewController = ViewController()
         viewController.modalPresentationStyle = .fullScreen
@@ -96,7 +101,7 @@ class LogoutPageView: UIViewController {
         logoutMessage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoutMessage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoutMessage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            logoutMessage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 60),
             logoutMessage.widthAnchor.constraint(equalToConstant: CGFloat(BOX_WIDTH)),
             logoutMessage.heightAnchor.constraint(equalToConstant: 400)
         ])
@@ -104,7 +109,7 @@ class LogoutPageView: UIViewController {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: logoutMessage.topAnchor, constant: 160),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(MARGIN)),
+            cancelButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -CGFloat(BUTTON_WIDTH/2 + PADDING)),
             cancelButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH)),
             cancelButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT))
         ])
@@ -112,7 +117,7 @@ class LogoutPageView: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoutButton.topAnchor.constraint(equalTo: logoutMessage.topAnchor, constant: 160),
-            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CGFloat(MARGIN)),
+            logoutButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: CGFloat(BUTTON_WIDTH/2 + PADDING)),
             logoutButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH)),
             logoutButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT))
         ])
@@ -130,13 +135,22 @@ class TimeZoneChangeView: UIViewController {
     private lazy var topBannerView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: Int(FULL_WIDTH), height: 100))
         view.backgroundColor = priColor
-        let label = UILabel(frame: CGRect(x: 0, y: 50, width: Int(FULL_WIDTH), height: 80))
+        let label = UILabel(frame: CGRect(x: 0, y: 50, width: Int(FULL_WIDTH), height: 30))
         label.text = "請輸入數字(\(String(MIN_LIMIT))至+\(String(MAX_LIMIT)))："
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.backgroundColor = priColor
         label.font = UIFont.systemFont(ofSize: 28)
         view.addSubview(label)
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            label.heightAnchor.constraint(equalToConstant: 30),
+        ])
+
         return view
     }()
 
@@ -238,9 +252,17 @@ class TimeZoneChangeView: UIViewController {
         self.view.addSubview(cancelButton)
         self.view.addSubview(submitButton)
 
+        topBannerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topBannerView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            topBannerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            topBannerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            topBannerView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
         currentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            currentLabel.topAnchor.constraint(equalTo: topBannerView.bottomAnchor, constant: 80),
+            currentLabel.topAnchor.constraint(equalTo: topBannerView.bottomAnchor, constant: 10),
             currentLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             currentLabel.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
             currentLabel.heightAnchor.constraint(equalToConstant: 30)
@@ -264,7 +286,7 @@ class TimeZoneChangeView: UIViewController {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: timezoneStepper.bottomAnchor, constant: 20),
-            cancelButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 64),
+            cancelButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -CGFloat(BUTTON_WIDTH/2 + PADDING)),
             cancelButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT)),
             cancelButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH))
         ])
@@ -272,7 +294,7 @@ class TimeZoneChangeView: UIViewController {
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             submitButton.topAnchor.constraint(equalTo: timezoneStepper.bottomAnchor, constant: 20),
-            submitButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -64),
+            submitButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: CGFloat(BUTTON_WIDTH/2 + PADDING)),
             submitButton.heightAnchor.constraint(equalToConstant: CGFloat(BUTTON_HEIGHT)),
             submitButton.widthAnchor.constraint(equalToConstant: CGFloat(BUTTON_WIDTH))
         ])
