@@ -133,7 +133,7 @@ class ViewController: UIViewController {
 
         usernameView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            usernameView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50),
+            usernameView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
             usernameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             usernameView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(42)),
             usernameView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(42)),

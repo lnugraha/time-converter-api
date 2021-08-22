@@ -52,13 +52,13 @@ class AlertMessage: UIViewController {
         logoView.addSubview(logoLabel)
         return logoView
     }
-    
+
     @objc fileprivate func proceedButtonTapped() {
         let mainPageView = MainPageView()
         mainPageView.modalPresentationStyle = .fullScreen
         present(mainPageView, animated: false, completion: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = gyColor
