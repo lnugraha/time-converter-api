@@ -10,20 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private lazy var globeLogo: UIImageView = {
-        let view = UIImageView(frame: CGRect(x: Int(FULL_WIDTH/2) - LOGOSIZE/2, y: 80, width: LOGOSIZE, height: LOGOSIZE))
-        view.image = UIImage(systemName: "globe")
-        view.contentMode = .scaleAspectFit
-        view.tintColor = priColor
-        return view
-    }()
-
     private lazy var usernameView: UIView = {
         let view = UIView(frame: CGRect(x: 10, y: 200, width: BOX_WIDTH, height: BOX_HEIGHT))
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
-
+        view.layer.borderColor = priColor.cgColor
+        view.layer.borderWidth = 2
         let image = UIImageView(frame: CGRect(x: 6, y: 6, width: 36, height: 36))
         image.image = UIImage(systemName: "person.fill")
         image.tintColor = priColor
@@ -48,6 +41,8 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
+        view.layer.borderColor = priColor.cgColor
+        view.layer.borderWidth = 2
         let image = UIImageView(frame: CGRect(x: 6, y: 6, width: 36, height: 36))
         image.image = UIImage(systemName: "lock.fill")
         image.tintColor = priColor
@@ -101,50 +96,71 @@ class ViewController: UIViewController {
             // Check if the returned response are correct
             APIHandler.postHttpsResponse(username: usernameTextField.text!, password: passwordTextField.text!){ resultParsed in
                 typealias configureSet = ConfigureUserDefault.SetUserDefaultValue
-
-                configureSet.setObjectId(objectId: resultParsed.objectId)
-                configureSet.setSessionToken(sessionToken: resultParsed.sessionToken)
-                configureSet.setUsername(username: resultParsed.username)
-                configureSet.setTimezone(timezone: resultParsed.timezone)
-                configureSet.setCode(code: resultParsed.code)
-                configureSet.setPhone(phone: resultParsed.phone)
-                configureSet.setReportEmail(reportEmail: resultParsed.reportEmail)
-                configureSet.setIsVerifiedReportEmail(isVerifiedReportEmail: resultParsed.isVerifiedReportEmail)
-
+//                if UserDefaults.standard.isLoggedIn() == true {
+                    configureSet.setObjectId(objectId: resultParsed.objectId)
+                    configureSet.setSessionToken(sessionToken: resultParsed.sessionToken)
+                    configureSet.setUsername(username: resultParsed.username)
+                    configureSet.setTimezone(timezone: resultParsed.timezone)
+                    configureSet.setCode(code: resultParsed.code)
+                    configureSet.setPhone(phone: resultParsed.phone)
+                    configureSet.setReportEmail(reportEmail: resultParsed.reportEmail)
+                    configureSet.setIsVerifiedReportEmail(isVerifiedReportEmail: resultParsed.isVerifiedReportEmail)
+                
+//                } else {
+//                    GlobalDataAccess.shared.objectId = resultParsed.objectId
+//                    GlobalDataAccess.shared.sessionToken = resultParsed.sessionToken
+//                    GlobalDataAccess.shared.username = resultParsed.username
+//                    GlobalDataAccess.shared.timezone = resultParsed.timezone
+//                    GlobalDataAccess.shared.code = resultParsed.code
+//                    GlobalDataAccess.shared.phone = resultParsed.phone
+//                    GlobalDataAccess.shared.reportEmail = resultParsed.reportEmail
+//                    GlobalDataAccess.shared.isVerifiedReportEmail = resultParsed.isVerifiedReportEmail
+//                }
             }
 
             typealias configureGet = ConfigureUserDefault.GetUserDefaultValue
 
-            if (configureGet.getObjectId() != "NULL_ID" && configureGet.getSessionToken() != "NULL_ID" && configureGet.getUsername() == usernameTextField.text!) {
-                // Save all login credentials inside the UserDefaults
-                UserDefaults.standard.setLoggedIn(value: true)
-                // Transition to the next view controller
-                let mainPageView = MainPageView()
-                mainPageView.modalPresentationStyle = .fullScreen
-                present(mainPageView, animated: false, completion: nil)
-            } else {
-                // Display error message upon unsuccessful login
-                warningMessage.text = "帳號或密碼無效，請重新輸入！"
-                passwordView.layer.borderWidth = 2
-                passwordView.layer.borderColor = redColor.cgColor
-                usernameView.layer.borderWidth = 2
-                usernameView.layer.borderColor = redColor.cgColor
-            }
+//            if UserDefaults.standard.isLoggedIn() == false {
+//                if (GlobalDataAccess.shared.objectId != "NULL_ID" && GlobalDataAccess.shared.sessionToken != "NULL_ID" && GlobalDataAccess.shared.username != usernameTextField.text!) {
+//                    // Display error message upon unsuccessful login
+//                    warningMessage.text = "帳號或密碼無效，請重新輸入！"
+//                    passwordView.layer.borderWidth = 2
+//                    passwordView.layer.borderColor = redColor.cgColor
+//                    usernameView.layer.borderWidth = 2
+//                    usernameView.layer.borderColor = redColor.cgColor
+//                } else {
+//                    // Save all login credentials inside the UserDefaults
+//                    UserDefaults.standard.setLoggedIn(value: true)
+//                    // Transition to the next view controller
+//                    let mainPageView = MainPageView()
+//                    mainPageView.modalPresentationStyle = .fullScreen
+//                    present(mainPageView, animated: false, completion: nil)
+//                }
 
+//            } else {
+                if (configureGet.getObjectId() == "NULL_ID" && configureGet.getSessionToken() == "NULL_ID") {
+                    // Display error message upon unsuccessful login
+                    warningMessage.text = "帳號或密碼無效，請重新輸入！"
+                    passwordView.layer.borderWidth = 2
+                    passwordView.layer.borderColor = redColor.cgColor
+                    usernameView.layer.borderWidth = 2
+                    usernameView.layer.borderColor = redColor.cgColor
+                } else {
+                    // Save all login credentials inside the UserDefaults
+                    UserDefaults.standard.setLoggedIn(value: true)
+                    print("Saved login state: \(UserDefaults.standard.isLoggedIn())")
+                    // Transition to the next view controller
+                    let mainPageView = MainPageView()
+                    mainPageView.modalPresentationStyle = .fullScreen
+                    present(mainPageView, animated: false, completion: nil)
+                    
+                }
+//            }
         }
     }
 
     @objc func displayLoginPageView() {
         self.view.backgroundColor = gyColor
-
-        self.view.addSubview(globeLogo)
-        globeLogo.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            globeLogo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 40),
-            globeLogo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            globeLogo.widthAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE)),
-            globeLogo.heightAnchor.constraint(equalToConstant: CGFloat(LOGOSIZE))
-        ])
 
         self.view.addSubview(usernameView)
         usernameView.addSubview(usernameTextField)
@@ -153,10 +169,10 @@ class ViewController: UIViewController {
 
         usernameView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            usernameView.topAnchor.constraint(equalTo: globeLogo.bottomAnchor, constant: 5),
+            usernameView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50),
             usernameView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            usernameView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
-            usernameView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            usernameView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(BOUNDARY)),
+            usernameView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(BOUNDARY)),
             usernameView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
         ])
 
@@ -164,8 +180,8 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             passwordView.topAnchor.constraint(equalTo: usernameView.bottomAnchor, constant: 10),
             passwordView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            passwordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
-            passwordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            passwordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(BOUNDARY)),
+            passwordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(BOUNDARY)),
             passwordView.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
         ])
 
@@ -174,8 +190,8 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             warningMessage.topAnchor.constraint(equalTo: passwordView.bottomAnchor, constant: 2),
             warningMessage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            warningMessage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
-            warningMessage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            warningMessage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(BOUNDARY)),
+            warningMessage.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(BOUNDARY)),
             warningMessage.heightAnchor.constraint(equalToConstant: CGFloat(20))
         ])
 
@@ -184,8 +200,8 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             loginButton.topAnchor.constraint(equalTo: warningMessage.bottomAnchor, constant: 2),
             loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            loginButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(PADDING)),
-            loginButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(PADDING)),
+            loginButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(BOUNDARY)),
+            loginButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -CGFloat(BOUNDARY)),
             loginButton.heightAnchor.constraint(equalToConstant: CGFloat(BOX_HEIGHT))
         ])
 
@@ -198,14 +214,16 @@ class ViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-
-        if UserDefaults.standard.isLoggedIn() {
-            let mainPageView = MainPageView()
-            mainPageView.modalPresentationStyle = .fullScreen
-            present(mainPageView, animated: false, completion: nil)
-        } else {
+        
+//        UserDefaults.standard.setLoggedIn(value: false)
+        
+//        if UserDefaults.standard.isLoggedIn() {
+//            let mainPageView = MainPageView()
+//            mainPageView.modalPresentationStyle = .fullScreen
+//            present(mainPageView, animated: false, completion: nil)
+//        } else {
             perform(#selector(displayLoginPageView))
-        }
+//        }
     }
 
 }

@@ -33,6 +33,7 @@ let FULL_HEIGHT: CGFloat = UIScreen.main.bounds.height
 let OFFSET: Int          = 12 // Between textfield and textbox
 let PADDING: Int         = 16 // A smaller version of margin
 let MARGIN: Int          = 64 // Between UIElement and edge
+let BOUNDARY: Int        = 42 // A spacing that can accommodate both portrait and landscape orientation without being affected by the notch
 
 let BOX_WIDTH: Int       = Int(FULL_WIDTH - 24)
 let BOX_HEIGHT: Int      = 48

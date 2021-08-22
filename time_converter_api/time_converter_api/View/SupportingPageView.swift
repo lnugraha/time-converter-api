@@ -70,12 +70,7 @@ class LogoutPageView: UIViewController {
     @objc func logoutButtonTapped(){
         // Remove all of the login credentials
         UserDefaults.standard.setLoggedIn(value: false)
-        UserDefaults.standard.removeObject(forKey: "username")
-        UserDefaults.standard.removeObject(forKey: "objectId")
-        UserDefaults.standard.removeObject(forKey: "sessionToken")
-        
-        
-        
+
         let viewController = ViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: false, completion: nil)
