@@ -15,7 +15,8 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
-
+        view.layer.borderColor = priColor.cgColor
+        view.layer.borderWidth = 2
         let image = UIImageView(frame: CGRect(x: 6, y: 6, width: 36, height: 36))
         image.image = UIImage(systemName: "person.fill")
         image.tintColor = priColor
@@ -40,6 +41,8 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.white
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
+        view.layer.borderColor = priColor.cgColor
+        view.layer.borderWidth = 2
         let image = UIImageView(frame: CGRect(x: 6, y: 6, width: 36, height: 36))
         image.image = UIImage(systemName: "lock.fill")
         image.tintColor = priColor
@@ -104,8 +107,6 @@ class ViewController: UIViewController {
             }
 
             if (GlobalDataAccess.shared.objectId != "NULL_ID" && GlobalDataAccess.shared.sessionToken != "NULL_ID" && GlobalDataAccess.shared.username == usernameTextField.text!) {
-                // Save all login credentials inside the UserDefaults
-                UserDefaults.standard.setLoggedIn(value: true)
                 // Transition to the next view controller
                 let mainPageView = MainPageView()
                 mainPageView.modalPresentationStyle = .fullScreen

@@ -38,7 +38,7 @@ class MainPageView: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 28)
         label.text = textStr
-        
+
         if title == true {
             label.frame = CGRect(x: TITLE_OFFSET, y: yPosition, width: TEXT_SIZE, height: 30)
             label.textAlignment = .left

@@ -104,7 +104,7 @@ class APIHandler {
      Convert a string that represents JSON format to a dictionary with String-and-Any data type pair
      - Parameter text: A string text that represents JSON format that will be converted to a dictionary data type by the end of the function
      */
-    private class func convertToDictionary(text: String) -> [String: Any]? {
+    public class func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
