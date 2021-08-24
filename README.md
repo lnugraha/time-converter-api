@@ -22,8 +22,8 @@ Problems statements:
     <th> Xcode 13 Beta 5 </th>
   </tr>
   <tr>
-    <td> <img src="../figures/Simulation_iPhone_12_Mini.mp4">
-    <td> <img src="../figures/Simulation_iPhone_SE.mp4">
+    <td> <img src="../figures/Simulation_iPhone_12_Mini.gif">
+    <td> <img src="../figures/Simulation_iPhone_SE.gif">
   </tr>
 </table>
 
