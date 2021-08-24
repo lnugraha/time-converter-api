@@ -13,12 +13,17 @@
 - Given username and password login credentials, design a login user interface that allows users to enter the system securely should the login credentials are accurate
 
 - Designs:
-
+- [ ] Create two textfields that accept username and password upon login to the system
+- [ ] The system will show two errors: empty textfield or incorrect credentials, if users do not input correct information
+- [ ] Once successfully login, only decipherable information will displayed to the main page
 
 ## Case 2: Update API Parameter(s) ##
 - After logging in to the system, design a user interface that allows users to change or modify their time zone
 
 - Designs:
+- [ ] Upon login, the timezone that is initially fetched from web API will be displayed in the main page
+- [ ] Users can modify their timezone by selecting the button at the bottom right corner
+- [ ] Users can select any number from -12 to 12 as their timezone
 
 ## Results ##
 
@@ -41,7 +46,7 @@
     <th> iOS 15 Beta 6 / iPhone 7 </th>
   </tr>
   <tr>
-    <td> 
-    <td> 
+    <td> <img src="./figures/Simulation_iPhone_11_Pro.gif">
+    <td> <img src="./figures/Simulation_iPhone_7.gif">
   </tr>
 </table>
