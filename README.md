@@ -7,11 +7,24 @@ Problems statements:
 
 - Designs:
 
-- Results:
 
 ## Case 2: Update API Parameter(s) ##
 - After logging in to the system, design a user interface that allows users to change or modify their time zone
 
 - Designs:
 
-- Results
+## Results ##
+
+1. Simulation Results using Xcode
+<table>
+  <tr> 
+    <th> Xcode 12.5.1 </th> 
+    <th> Xcode 13 Beta 5 </th>
+  </tr>
+  <tr>
+    <td> <img src="../figures/Simulation_iPhone_12_Mini.mp4">
+    <td> <img src="../figures/Simulation_iPhone_SE.mp4">
+  </tr>
+</table>
+
+2. Simulation Results using devices
